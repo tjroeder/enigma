@@ -1,0 +1,4 @@
+this is a string for testing
+this is a second line
+th1s line h4$ `1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>? special characters
+this is the final line!
