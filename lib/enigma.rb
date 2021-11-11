@@ -16,8 +16,12 @@ class Enigma
     rand(99999).to_s.rjust(5, '0')
   end
 
-  def offset_creator
-    cur_date = Date.today.strftime('%d''%m''%y').to_i ** 2
+  def date_formatter
+    Date.today.strftime('%d''%m''%y')
+  end
+
+  def offset_creator(date = date_formatter)
+    cur_date = date.to_i ** 2
     cur_date.to_s.slice(-4..-1)
   end
 end
