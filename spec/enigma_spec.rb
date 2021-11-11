@@ -52,5 +52,20 @@ RSpec.describe Enigma do
         expect(enigma.key_creator).to match(/\d{5}/)
       end
     end
+
+    describe '#offset_creator' do
+      it 'is a string' do
+        expect(enigma.offset_creator).to be_a(String)
+      end
+
+      it 'can create a string of length 4' do
+        expect(enigma.offset_creator.length).to eq(4)
+      end
+
+      it 'can create a string of 4 digits' do
+        expect(enigma.offset_creator).to match(/\d{4}/)
+      end
+    end
   end
+
 end

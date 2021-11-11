@@ -1,3 +1,4 @@
+require 'date'
 require_relative '../mod/file_io'
 
 class Enigma
@@ -13,5 +14,10 @@ class Enigma
   
   def key_creator
     rand(99999).to_s.rjust(5, '0')
+  end
+
+  def offset_creator
+    cur_date = Date.today.strftime('%d''%m''%y').to_i ** 2
+    cur_date.to_s.slice(-4..-1)
   end
 end
