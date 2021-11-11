@@ -2,6 +2,7 @@ require_relative './spec_helper'
 require_relative '../lib/enigma'
 
 RSpec.describe Enigma do
+  let(:fixture_message_path) { './spec/fixtures/message.txt' }
   let(:enigma) { Enigma.new }
   
   describe '#initialize' do
@@ -13,6 +14,15 @@ RSpec.describe Enigma do
       expect(enigma.message).to eq('')
       expect(enigma.key).to eq('')
       expect(enigma.offset).to eq('')
+    end
+  end
+
+  describe 'file_io module' do
+    describe '#file_read_in' do
+      it 'can read a file name and convert to downcase string' do
+        expected = "this is a string for testing\nthis is a second line\nth1s line h4$ `1234567890-=[]\\;',./~!@\#$%^&*()_+{}|:\"<>? special characters\nthis is the final line!"
+        expect(enigma.file_read(fixture_message_path)).to eq(expected)
+      end
     end
   end
 end
