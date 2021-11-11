@@ -5,8 +5,10 @@ RSpec.describe Enigma do
   let(:fixture_message_path) { './spec/fixtures/message.txt' }
   let(:fixture_encrypted_path) { './spec/fixtures/encrypted.txt' }
   let(:fixture_decrypted_path) { './spec/fixtures/decrypted.txt' }
-  let(:fake_date) { "101121" }
+  let(:fake_date) { '101121' }
+  let(:fake_key) { '12345' }
   let(:enigma) { Enigma.new }
+  let(:fake_offset) { enigma.offset_creator(fake_date) }
   let(:enigma_mock) { double('enigma mock') }
   
   
@@ -43,7 +45,7 @@ RSpec.describe Enigma do
 
   describe 'Enigma class methods' do
     describe '#key_creator' do
-      it 'is a string' do
+      it 'returns string' do
         expect(enigma.key_creator).to be_a(String)
       end
 
@@ -52,8 +54,8 @@ RSpec.describe Enigma do
       end
 
       it 'can return a random 5 digit number string with a stub' do
-        allow(enigma_mock).to receive(:key_creator).and_return('12345')
-        expect(enigma_mock.key_creator).to eq('12345')
+        allow(enigma).to receive(:key_creator).and_return('12345')
+        expect(enigma.key_creator).to eq('12345')
       end
     end
     
@@ -69,7 +71,7 @@ RSpec.describe Enigma do
     end
 
     describe '#offset_creator' do
-      it 'is a string' do
+      it 'returns string' do
         expect(enigma.offset_creator(fake_date)).to be_a(String)
       end
 
@@ -79,6 +81,38 @@ RSpec.describe Enigma do
 
       it 'can square date and return the last four digits' do
         expect(enigma.offset_creator(fake_date)).to eq('6641')
+      end
+    end
+
+    describe '#shift_creator' do
+      it 'returns hash' do
+        expect(enigma.shift_creator(fake_key, fake_date)).to be_a(Hash)
+      end
+
+      it 'returns array of length four' do
+        expect(enigma.shift_creator(fake_key, fake_date).length).to eq(4)
+      end
+
+      it 'values are sum of key and offset' do
+        fake_a_key = (fake_key[0] + fake_key[1]).to_i
+        fake_a_offset = fake_offset[0].to_i
+        expected = fake_a_key + fake_a_offset
+        expect(enigma.shift_creator(fake_key, fake_offset)[:a]).to eq(expected)
+        
+        fake_b_key = (fake_key[1] + fake_key[2]).to_i
+        fake_b_offset = fake_offset[1].to_i
+        expected = fake_b_key + fake_b_offset
+        expect(enigma.shift_creator(fake_key, fake_offset)[:b]).to eq(expected)
+        
+        fake_c_key = (fake_key[2] + fake_key[3]).to_i
+        fake_c_offset = fake_offset[2].to_i
+        expected = fake_c_key + fake_c_offset
+        expect(enigma.shift_creator(fake_key, fake_offset)[:c]).to eq(expected)
+
+        fake_d_key = (fake_key[3] + fake_key[4]).to_i
+        fake_d_offset = fake_offset[3].to_i
+        expected = fake_d_key + fake_d_offset
+        expect(enigma.shift_creator(fake_key, fake_offset)[:d]).to eq(expected)
       end
     end
   end
