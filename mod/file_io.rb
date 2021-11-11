@@ -4,7 +4,7 @@ module FileIO
     file_data.downcase
   end
 
-  def file_write_out(new_message, file_path)
-    File.write(file_path.to)
+  def file_write(file_path, new_message)
+    file_data = File.write(file_path, new_message)
   end
 end
