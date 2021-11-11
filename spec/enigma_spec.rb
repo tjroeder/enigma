@@ -8,5 +8,11 @@ RSpec.describe Enigma do
     it 'exists' do
       expect(enigma).to be_a(Enigma)
     end
+
+    it 'has attributes' do
+      expect(enigma.message).to eq('')
+      expect(enigma.key).to eq('')
+      expect(enigma.offset).to eq('')
+    end
   end
 end
