@@ -37,4 +37,20 @@ RSpec.describe Enigma do
       end
     end
   end
+
+  describe 'Enigma class methods' do
+    describe '#key_creator' do
+      it 'is a string' do
+        expect(enigma.key_creator).to be_a(String)
+      end
+
+      it 'can create a string of length 5' do
+        expect(enigma.key_creator.length).to eq(5)
+      end
+
+      it 'can create a string of five digits' do 
+        expect(enigma.key_creator).to match(/\d{5}/)
+      end
+    end
+  end
 end
