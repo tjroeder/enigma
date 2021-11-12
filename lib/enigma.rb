@@ -58,4 +58,11 @@ class Enigma
     encrypted_message = crypter(message.downcase, shift_array)
     {encryption: encrypted_message, key: key, date: date}
   end
+
+  def decrypt(message, key = key_creator, date = date_formatter)
+    offset = offset_creator(date)
+    shift_array = shift_creator(key, offset).map{ |e| e * -1 }
+    decrypted_message = crypter(message.downcase, shift_array)
+    {encryption: decrypted_message, key: key, date: date}
+  end
 end

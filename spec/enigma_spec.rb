@@ -2,16 +2,16 @@ require_relative './spec_helper'
 require_relative '../lib/enigma'
 
 RSpec.describe Enigma do
-  let(:fixture_message_path) { './spec/fixtures/message.txt' }
+  let(:fixture_message_path)   { './spec/fixtures/message.txt' }
   let(:fixture_encrypted_path) { './spec/fixtures/encrypted.txt' }
   let(:fixture_decrypted_path) { './spec/fixtures/decrypted.txt' }
-  let(:fake_date) { '101121' }
-  let(:fake_key) { '12345' }
-  let(:enigma) { Enigma.new }
-  let(:message_str) { enigma.file_read(fixture_message_path) }
-  let(:fake_offset) { enigma.offset_creator(fake_date) }
-  let(:fake_shift) { enigma.shift_creator('00000', '1111') }
-  let(:enigma_mock) { double('enigma mock') }
+  let(:fake_date)              { '101121' }
+  let(:fake_key)               { '12345' }
+  let(:enigma)                 { Enigma.new }
+  let(:message_str)            { enigma.file_read(fixture_message_path) }
+  let(:fake_offset)            { enigma.offset_creator(fake_date) }
+  let(:fake_shift)             { enigma.shift_creator('00000', '1111') }
+  let(:enigma_mock)            { double('enigma mock') }
   
   
   describe '#initialize' do
@@ -193,6 +193,54 @@ RSpec.describe Enigma do
         encrypt_hash = enigma.encrypt('hello')
         expect(encrypt_hash[:key]).to eq('12345')
         expect(encrypt_hash[:date]).to eq('101121')
+      end
+    end
+
+    describe '#decrypt' do
+      it 'returns hash' do
+        expect(enigma.decrypt('zgwdf', fake_key, fake_date)).to be_a(Hash)
+      end
+      
+      it 'hash has three keys with strings' do
+        decrypt_hash = enigma.decrypt('zgwdf', fake_key, fake_date)
+        expect(decrypt_hash[:encryption]).to be_a(String)
+        expect(decrypt_hash[:key]).to be_a(String)
+        expect(decrypt_hash[:date]).to be_a(String)
+      end
+      
+      it 'can return a encrypted message' do
+        decrypt_hash = enigma.decrypt('zgwdf', fake_key, fake_date)
+        expect(decrypt_hash[:encryption]).to eq('hello')
+      end
+      
+      it 'can return a key' do
+        decrypt_hash = enigma.decrypt('zgwdf', fake_key, fake_date)
+        expect(decrypt_hash[:key]).to eq(fake_key)
+      end
+      
+      it 'can return a date' do
+        decrypt_hash = enigma.decrypt('zgwdf', fake_key, fake_date)
+        expect(decrypt_hash[:date]).to eq(fake_date)
+      end
+      
+      # xit 'can return a random key if not given' do
+      #   allow(enigma).to receive(:key_creator).and_return('12345')
+      #   decrypt_hash = engima.decrypt('zgwdf',, fake_date)
+      #   expect(decrypt_hash[:key]).to eq('12345')
+      # end
+      
+      it 'can return the current date if not given' do
+        allow(enigma).to receive(:date_formatter).and_return('101121')
+        decrypt_hash = enigma.decrypt('zgwdf', fake_key)
+        expect(decrypt_hash[:key]).to eq('12345')
+      end
+      
+      it 'can return both random key and current date if not given' do
+        allow(enigma).to receive(:key_creator).and_return('12345')
+        allow(enigma).to receive(:date_formatter).and_return('101121')
+        decrypt_hash = enigma.decrypt('zgwdf')
+        expect(decrypt_hash[:key]).to eq('12345')
+        expect(decrypt_hash[:date]).to eq('101121')
       end
     end
   end
