@@ -8,7 +8,9 @@ RSpec.describe Enigma do
   let(:fake_date) { '101121' }
   let(:fake_key) { '12345' }
   let(:enigma) { Enigma.new }
+  let(:message_str) { enigma.file_read(fixture_message_path) }
   let(:fake_offset) { enigma.offset_creator(fake_date) }
+  let(:fake_shift) { enigma.shift_creator('00000', '1111') }
   let(:enigma_mock) { double('enigma mock') }
   
   
@@ -85,34 +87,64 @@ RSpec.describe Enigma do
     end
 
     describe '#shift_creator' do
-      it 'returns hash' do
-        expect(enigma.shift_creator(fake_key, fake_date)).to be_a(Hash)
+      it 'returns array' do
+        expect(enigma.shift_creator(fake_key, fake_offset)).to be_a(Array)
       end
 
       it 'returns array of length four' do
-        expect(enigma.shift_creator(fake_key, fake_date).length).to eq(4)
+        expect(enigma.shift_creator(fake_key, fake_offset).length).to eq(4)
       end
 
       it 'values are sum of key and offset' do
         fake_a_key = (fake_key[0] + fake_key[1]).to_i
         fake_a_offset = fake_offset[0].to_i
         expected = fake_a_key + fake_a_offset
-        expect(enigma.shift_creator(fake_key, fake_offset)[:a]).to eq(expected)
+        expect(enigma.shift_creator(fake_key, fake_offset)[0]).to eq(expected)
         
         fake_b_key = (fake_key[1] + fake_key[2]).to_i
         fake_b_offset = fake_offset[1].to_i
         expected = fake_b_key + fake_b_offset
-        expect(enigma.shift_creator(fake_key, fake_offset)[:b]).to eq(expected)
+        expect(enigma.shift_creator(fake_key, fake_offset)[1]).to eq(expected)
         
         fake_c_key = (fake_key[2] + fake_key[3]).to_i
         fake_c_offset = fake_offset[2].to_i
         expected = fake_c_key + fake_c_offset
-        expect(enigma.shift_creator(fake_key, fake_offset)[:c]).to eq(expected)
+        expect(enigma.shift_creator(fake_key, fake_offset)[2]).to eq(expected)
 
         fake_d_key = (fake_key[3] + fake_key[4]).to_i
         fake_d_offset = fake_offset[3].to_i
         expected = fake_d_key + fake_d_offset
-        expect(enigma.shift_creator(fake_key, fake_offset)[:d]).to eq(expected)
+        expect(enigma.shift_creator(fake_key, fake_offset)[3]).to eq(expected)
+      end
+    end
+
+    describe '#crypter' do
+      it 'can return a message of same length' do
+        expect(enigma.crypter(message_str, fake_shift).length).to eq(150)
+      end
+      
+      it 'can take a message and return it shifted' do
+        expected = 'ifmmp'
+        expect(enigma.crypter('hello', fake_shift)).to eq(expected)
+      end
+
+      it 'can skip special characters' do
+        expected = 'i3!1()arxfsuz'
+        expect(enigma.crypter('h3!1() qwerty', fake_shift)).to eq(expected)
+      end
+
+      it 'can shift with different a, b, c, d values then repeat' do
+        new_shift = [1, 2, 3, 4]
+        expect(enigma.crypter('hello', new_shift)).to eq('igopp')
+      end
+      
+      it 'can shift back to the same character' do
+        new_shift = [27, 27, 27, 27]
+        expect(enigma.crypter('hello', new_shift)).to eq('hello')
+      end
+
+      it 'will return same message if all special characters' do
+        expect(enigma.crypter("1$\n&*()", fake_shift)).to eq("1$\n&*()")
       end
     end
   end
