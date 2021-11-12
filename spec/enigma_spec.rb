@@ -71,30 +71,30 @@ RSpec.describe Enigma do
         expect(enigma_mock.date_formatter).to eq('101121')
       end
     end
-
+    
     describe '#offset_creator' do
       it 'returns string' do
         expect(enigma.offset_creator(fake_date)).to be_a(String)
       end
-
+      
       it 'can create a string of 4 digits' do
         expect(enigma.offset_creator(fake_date)).to match(/\d{4}/)
       end
-
+      
       it 'can square date and return the last four digits' do
         expect(enigma.offset_creator(fake_date)).to eq('6641')
       end
     end
-
+    
     describe '#shift_creator' do
       it 'returns array' do
         expect(enigma.shift_creator(fake_key, fake_offset)).to be_a(Array)
       end
-
+      
       it 'returns array of length four' do
         expect(enigma.shift_creator(fake_key, fake_offset).length).to eq(4)
       end
-
+      
       it 'values are sum of key and offset' do
         fake_a_key = (fake_key[0] + fake_key[1]).to_i
         fake_a_offset = fake_offset[0].to_i
@@ -110,14 +110,14 @@ RSpec.describe Enigma do
         fake_c_offset = fake_offset[2].to_i
         expected = fake_c_key + fake_c_offset
         expect(enigma.shift_creator(fake_key, fake_offset)[2]).to eq(expected)
-
+        
         fake_d_key = (fake_key[3] + fake_key[4]).to_i
         fake_d_offset = fake_offset[3].to_i
         expected = fake_d_key + fake_d_offset
         expect(enigma.shift_creator(fake_key, fake_offset)[3]).to eq(expected)
       end
     end
-
+    
     describe '#crypter' do
       it 'can return a message of same length' do
         expect(enigma.crypter(message_str, fake_shift).length).to eq(150)
@@ -127,12 +127,12 @@ RSpec.describe Enigma do
         expected = 'ifmmp'
         expect(enigma.crypter('hello', fake_shift)).to eq(expected)
       end
-
+      
       it 'can skip special characters' do
         expected = 'i3!1()arxfsuz'
         expect(enigma.crypter('h3!1() qwerty', fake_shift)).to eq(expected)
       end
-
+      
       it 'can shift with different a, b, c, d values then repeat' do
         new_shift = [1, 2, 3, 4]
         expect(enigma.crypter('hello', new_shift)).to eq('igopp')
@@ -142,11 +142,58 @@ RSpec.describe Enigma do
         new_shift = [27, 27, 27, 27]
         expect(enigma.crypter('hello', new_shift)).to eq('hello')
       end
-
+      
       it 'will return same message if all special characters' do
         expect(enigma.crypter("1$\n&*()", fake_shift)).to eq("1$\n&*()")
       end
     end
+    
+    describe '#encrypt' do
+      it 'returns hash' do
+        expect(enigma.encrypt('hello', fake_key, fake_date)).to be_a(Hash)
+      end
+      
+      it 'hash has three keys with strings' do
+        encrypt_hash = enigma.encrypt('hello', fake_key, fake_date)
+        expect(encrypt_hash[:encryption]).to be_a(String)
+        expect(encrypt_hash[:key]).to be_a(String)
+        expect(encrypt_hash[:date]).to be_a(String)
+      end
+      
+      it 'can return a encrypted message' do
+        encrypt_hash = enigma.encrypt('hello', fake_key, fake_date)
+        expect(encrypt_hash[:encryption]).to eq('zgwdf')
+      end
+      
+      it 'can return a key' do
+        encrypt_hash = enigma.encrypt('hello', fake_key, fake_date)
+        expect(encrypt_hash[:key]).to eq(fake_key)
+      end
+      
+      it 'can return a date' do
+        encrypt_hash = enigma.encrypt('hello', fake_key, fake_date)
+        expect(encrypt_hash[:date]).to eq(fake_date)
+      end
+      
+      # xit 'can return a random key if not given' do
+      #   allow(enigma).to receive(:key_creator).and_return('12345')
+      #   encrypt_hash = engima.encrypt('hello',, fake_date)
+      #   expect(encrypt_hash[:key]).to eq('12345')
+      # end
+      
+      it 'can return the current date if not given' do
+        allow(enigma).to receive(:date_formatter).and_return('101121')
+        encrypt_hash = enigma.encrypt('hello', fake_key)
+        expect(encrypt_hash[:key]).to eq('12345')
+      end
+      
+      it 'can return both random key and current date if not given' do
+        allow(enigma).to receive(:key_creator).and_return('12345')
+        allow(enigma).to receive(:date_formatter).and_return('101121')
+        encrypt_hash = enigma.encrypt('hello')
+        expect(encrypt_hash[:key]).to eq('12345')
+        expect(encrypt_hash[:date]).to eq('101121')
+      end
+    end
   end
-
 end

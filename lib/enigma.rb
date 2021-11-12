@@ -21,7 +21,7 @@ class Enigma
     Date.today.strftime('%d''%m''%y')
   end
 
-  def offset_creator(date = date_formatter)
+  def offset_creator(date)
     cur_date = date.to_i ** 2
     cur_date.to_s.slice(-4..-1)
   end
@@ -50,5 +50,12 @@ class Enigma
       shift_array.rotate!
     end
     new_message
+  end
+
+  def encrypt(message, key = key_creator, date = date_formatter)
+    offset = offset_creator(date)
+    shift_array = shift_creator(key, offset)
+    encrypted_message = crypter(message.downcase, shift_array)
+    {encryption: encrypted_message, key: key, date: date}
   end
 end
