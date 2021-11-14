@@ -1,7 +1,7 @@
 ![image](https://user-images.githubusercontent.com/78194232/141664189-d4d85cf1-058e-47c6-ab41-51ffd9917001.png)
 
 # Enigma
-Is a program created take secret messages, encrypt them using a modified [Caesar Cipher](https://en.wikipedia.org/wiki/Caesar_cipher). The program can be utilized from the CLI with arguements passed in the terminal.
+Is a program created to take secret messages, encrypt them using a modified [Caesar Cipher](https://en.wikipedia.org/wiki/Caesar_cipher). The program can be utilized from the CLI with arguements passed in the terminal.
 ## Setup (for Unix based systems):
 ### 1. Clone this repository:
 ---
@@ -61,21 +61,25 @@ Use `bundle info [gemname]` to see where a bundled gem is installed.
 
 If there are any errors, verify that bundler or your ruby environment was correctly setup.
 
-### 4. Message to encrypt:
+## Encrypt and Decrypt messages:
+### 1. Message to encrypt:
+---
 Open the message text file in your preferred text editor.
 ```shell
 $ code message.txt
 ```
 Once the file is open type, or paste your message to encrypt. Save and close the file.
 
-### 5. Encrypt command line input:
+### 2. Encrypt command line input:
+---
 In the terminal, run the `encrypt.rb` file with arguments for the message and encrypted message paths.
 ```shell
 $ ruby ./lib/encrypt.rb message.txt encrypted.txt
 ```
 Open `encrypted.txt` to view the encrypted message.
 
-### 6. Decrypt command line input:
+### 3. Decrypt command line input:
+---
 In the terminal, run the `decrypt.rb` file with arguments for the encrypted, and decrypted message paths, and the key and date strings that were used to create the decrypted message. For example see the below possible terminal command.
 ```shell
 $ ruby ./lib/decrypt.rb encrypted.txt decrypted.txt 82548 240818
