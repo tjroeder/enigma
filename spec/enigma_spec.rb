@@ -12,8 +12,7 @@ RSpec.describe Enigma do
   let(:fake_offset)            { enigma.offset_creator(fake_date) }
   let(:fake_shift)             { enigma.shift_creator('00000', '1111') }
   let(:enigma_mock)            { double('enigma mock') }
-  
-  
+    
   describe '#initialize' do
     it 'exists' do
       expect(enigma).to be_a(Enigma)
