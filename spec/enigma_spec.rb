@@ -21,15 +21,17 @@ RSpec.describe Enigma do
     it 'has attributes' do
       expected = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "]
 
-      expect(enigma.key).to eq('')
-      expect(enigma.date).to eq('')
-      expect(enigma.print_message).to eq('')
-      expect(enigma.file_write_path).to eq('')
+      expect(enigma.cli_key).to eq('')
+      expect(enigma.cli_date).to eq('')
+      expect(enigma.cli_message).to eq('')
+      expect(enigma.cli_print_message).to eq('')
+      expect(enigma.cli_file_read_path).to eq('')
+      expect(enigma.cli_file_write_path).to eq('')
       expect(enigma.char_array).to eq(expected)
     end
   end
 
-  describe 'file_io module' do
+  describe 'InputsOutputs module' do
     describe '#file_read' do
       it 'can read a file name and convert to downcase string' do
         expected = "this is a string for testing\nthis is a second line\nth1s line h4$ `1234567890-=[]\\;',./~!@\#$%^&*()_+{}|:\"<>? special characters\nthis is the final line!"
@@ -44,6 +46,27 @@ RSpec.describe Enigma do
         enigma.file_write(fixture_decrypted_path, new_message)
 
         expect(enigma.file_read(fixture_decrypted_path)).to eq(new_message)
+      end
+    end
+
+    describe '#cli_user_input' do
+      let(:encrypt_arg_array) { ['message.txt', 'encrypted.txt'] }
+      let(:decrypt_arg_array) { ['encrypted.txt', 'decrypted.txt', '82648', '240818'] }
+
+      it 'can take in two CLI inputs from array' do        
+        enigma.cli_user_input(encrypt_arg_array)
+
+        expect(enigma.cli_file_read_path).to eq(encrypt_arg_array[0])
+        expect(enigma.cli_file_write_path).to eq(encrypt_arg_array[1])
+      end
+
+      it 'can take in four CLI inputs from array' do        
+        enigma.cli_user_input(decrypt_arg_array)
+
+        expect(enigma.cli_file_read_path).to eq(decrypt_arg_array[0])
+        expect(enigma.cli_file_write_path).to eq(decrypt_arg_array[1])
+        expect(enigma.cli_file_write_path).to eq(decrypt_arg_array[1])
+        expect(enigma.cli_file_write_path).to eq(decrypt_arg_array[1])
       end
     end
   end
