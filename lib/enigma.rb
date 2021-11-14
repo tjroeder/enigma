@@ -30,13 +30,6 @@ class Enigma
   end
 
   def shift_creator(key, offset)
-    # shift_hash = Hash.new{0}
-    # offset.each_with_index do |element, index|
-    #   key_offset = key.slice((index)..(index + 1)).to_i + offset[index].to_i
-    #   shift_hash[element] = key_offset
-    # end
-    # shift_hash
-
     shift_array = []
     offset.each_char.with_index do |char, index|
       shift_array.push(char.to_i + key.slice(index..(index + 1)).to_i)
