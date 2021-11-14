@@ -1,18 +1,24 @@
 require 'date'
-require_relative '../mod/file_io'
+require_relative '../mod/inputs_outputs'
 
 class Enigma
-  include FileIO
+  include InputsOutputs
 
   attr_reader :char_array
-  attr_accessor :key, :date, :print_message, :file_write_path
+  attr_accessor :cli_key, 
+                :cli_date, 
+                :cli_message, 
+                :cli_print_message, 
+                :cli_read_path, 
+                :cli_write_path
 
   def initialize
-    @key = ''
-    @date = ''
-    @offset = ''
-    @print_message = ''
-    @file_write_path = ''
+    @cli_key = ''
+    @cli_date = ''
+    @cli_message = ''
+    @cli_print_message = ''
+    @cli_read_path = ''
+    @cli_write_path = ''
     @char_array = ('a'..'z').to_a.push(' ')
   end
   
@@ -49,22 +55,18 @@ class Enigma
   end
 
   def encrypt(message, key = key_creator, date = date_formatter)
-    @key = key
-    @date = date
-    offset = offset_creator(@date)
-    @print_message = "Created '#{@file_write_path}' with key #{@key} and date #{@date}"
-    shift_array = shift_creator(@key, offset)
+    offset = offset_creator(date)
+    @cli_print_message = "Created '#{@cli_write_path}' with key #{key} and date #{date}"
+    shift_array = shift_creator(key, offset)
     encrypted_message = crypter(message.downcase, shift_array)
     {encryption: encrypted_message, key: key, date: date}
   end
 
   def decrypt(message, key = key_creator, date = date_formatter)
-    @key = key
-    @date = date
-    offset = offset_creator(@date)
-    @print_message = "Created '#{@file_write_path}' with key #{@key} and date #{@date}"
-    shift_array = shift_creator(@key, offset).map{ |e| e * -1 }
+    offset = offset_creator(date)
+    @cli_print_message = "Created '#{@cli_write_path}' with key #{key} and date #{date}"
+    shift_array = shift_creator(key, offset).map{ |e| e * -1 }
     decrypted_message = crypter(message.downcase, shift_array)
-    {encryption: decrypted_message, key: @key, date: @date}
+    {encryption: decrypted_message, key: key, date: date}
   end
 end
