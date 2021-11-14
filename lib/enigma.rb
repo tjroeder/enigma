@@ -4,12 +4,15 @@ require_relative '../mod/file_io'
 class Enigma
   include FileIO
 
-  attr_reader :message, :key, :offset, :char_array
+  attr_reader :char_array
+  attr_accessor :key, :date, :print_message, :file_write_path
 
   def initialize
-    @message = ''
     @key = ''
+    @date = ''
     @offset = ''
+    @print_message = ''
+    @file_write_path = ''
     @char_array = ('a'..'z').to_a.push(' ')
   end
   
@@ -53,16 +56,22 @@ class Enigma
   end
 
   def encrypt(message, key = key_creator, date = date_formatter)
-    offset = offset_creator(date)
-    shift_array = shift_creator(key, offset)
+    @key = key
+    @date = date
+    offset = offset_creator(@date)
+    @print_message = "Created '#{@file_write_path}' with key #{@key} and date #{@date}"
+    shift_array = shift_creator(@key, offset)
     encrypted_message = crypter(message.downcase, shift_array)
     {encryption: encrypted_message, key: key, date: date}
   end
 
   def decrypt(message, key = key_creator, date = date_formatter)
-    offset = offset_creator(date)
-    shift_array = shift_creator(key, offset).map{ |e| e * -1 }
+    @key = key
+    @date = date
+    offset = offset_creator(@date)
+    @print_message = "Created '#{@file_write_path}' with key #{@key} and date #{@date}"
+    shift_array = shift_creator(@key, offset).map{ |e| e * -1 }
     decrypted_message = crypter(message.downcase, shift_array)
-    {encryption: decrypted_message, key: key, date: date}
+    {encryption: decrypted_message, key: @key, date: @date}
   end
 end

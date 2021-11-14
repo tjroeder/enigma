@@ -20,9 +20,13 @@ RSpec.describe Enigma do
     end
 
     it 'has attributes' do
-      expect(enigma.message).to eq('')
+      expected = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "]
+
       expect(enigma.key).to eq('')
-      expect(enigma.offset).to eq('')
+      expect(enigma.date).to eq('')
+      expect(enigma.print_message).to eq('')
+      expect(enigma.file_write_path).to eq('')
+      expect(enigma.char_array).to eq(expected)
     end
   end
 
