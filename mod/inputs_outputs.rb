@@ -18,4 +18,8 @@ module InputsOutputs
     @cli_key = arg_array[2] if arg_array.length >= 3
     @cli_date = arg_array[3] if arg_array.length == 4
   end
+
+  def cli_print_message
+    "Created '#{self.cli_write_path}' with key #{self.cli_key} and date #{self.cli_date}"
+  end
 end
