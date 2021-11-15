@@ -24,9 +24,8 @@ RSpec.describe Enigma do
       expect(enigma.cli_key).to eq('')
       expect(enigma.cli_date).to eq('')
       expect(enigma.cli_message).to eq('')
-      expect(enigma.cli_print_message).to eq('')
-      expect(enigma.cli_file_read_path).to eq('')
-      expect(enigma.cli_file_write_path).to eq('')
+      expect(enigma.cli_read_path).to eq('')
+      expect(enigma.cli_write_path).to eq('')
       expect(enigma.char_array).to eq(expected)
     end
   end
@@ -56,17 +55,33 @@ RSpec.describe Enigma do
       it 'can take in two CLI inputs from array' do        
         enigma.cli_user_input(encrypt_arg_array)
 
-        expect(enigma.cli_file_read_path).to eq(encrypt_arg_array[0])
-        expect(enigma.cli_file_write_path).to eq(encrypt_arg_array[1])
+        expect(enigma.cli_read_path).to eq(encrypt_arg_array[0])
+        expect(enigma.cli_write_path).to eq(encrypt_arg_array[1])
       end
 
       it 'can take in four CLI inputs from array' do        
         enigma.cli_user_input(decrypt_arg_array)
 
-        expect(enigma.cli_file_read_path).to eq(decrypt_arg_array[0])
-        expect(enigma.cli_file_write_path).to eq(decrypt_arg_array[1])
-        expect(enigma.cli_file_write_path).to eq(decrypt_arg_array[1])
-        expect(enigma.cli_file_write_path).to eq(decrypt_arg_array[1])
+        expect(enigma.cli_read_path).to eq(decrypt_arg_array[0])
+        expect(enigma.cli_write_path).to eq(decrypt_arg_array[1])
+        expect(enigma.cli_write_path).to eq(decrypt_arg_array[1])
+        expect(enigma.cli_write_path).to eq(decrypt_arg_array[1])
+      end
+    end
+
+    describe '#cli_print_message' do
+      it 'can print message with encrypt text output' do
+        arg_array = ['message.txt', 'encrypted.txt', '12345', '101121']
+        enigma.cli_user_input(arg_array)
+        expected = "Created 'encrypted.txt' with key 12345 and date 101121" 
+        expect(enigma.cli_print_message).to eq(expected)
+      end
+      
+      it 'can print message with decrypt text output' do
+        arg_array = ['encrypted.txt', 'decrypted.txt', '12345', '101121']
+        enigma.cli_user_input(arg_array)
+        expected = "Created 'decrypted.txt' with key 12345 and date 101121" 
+        expect(enigma.cli_print_message).to eq(expected)
       end
     end
   end
