@@ -8,7 +8,6 @@ class Enigma
   attr_accessor :cli_key, 
                 :cli_date, 
                 :cli_message, 
-                :cli_print_message, 
                 :cli_read_path, 
                 :cli_write_path
 
@@ -16,7 +15,6 @@ class Enigma
     @cli_key = ''
     @cli_date = ''
     @cli_message = ''
-    @cli_print_message = ''
     @cli_read_path = ''
     @cli_write_path = ''
     @char_array = ('a'..'z').to_a.push(' ')
@@ -56,7 +54,6 @@ class Enigma
 
   def encrypt(message, key = key_creator, date = date_formatter)
     offset = offset_creator(date)
-    @cli_print_message = "Created '#{@cli_write_path}' with key #{key} and date #{date}"
     shift_array = shift_creator(key, offset)
     encrypted_message = crypter(message.downcase, shift_array)
     {encryption: encrypted_message, key: key, date: date}
@@ -64,7 +61,6 @@ class Enigma
 
   def decrypt(message, key = key_creator, date = date_formatter)
     offset = offset_creator(date)
-    @cli_print_message = "Created '#{@cli_write_path}' with key #{key} and date #{date}"
     shift_array = shift_creator(key, offset).map{ |e| e * -1 }
     decrypted_message = crypter(message.downcase, shift_array)
     {encryption: decrypted_message, key: key, date: date}
