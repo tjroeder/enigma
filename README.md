@@ -90,6 +90,15 @@ Open `decrypted.txt` to view the newly decrypted message.
 
 [Tim Roeder](https://github.com/tjroeder)
 
+# Rubric:
+
+|Categories   |Score  |Personal Evaluation |
+|-------------|:-----:|-------------------:|
+|Functionality|3      |Enigma class encrypt work, encrypt/decrypt from CLI works.|
+|OOP          |4      |Used both superclass and module. Superclass (Cipher) used with attributes. Cipher could be used for other non-Enigma cipher machines. Module Inputs and Outputs controls all IO for Enigma. No attributes used.|
+|Ruby Conventions|4   |Code is well formatted, short efficient methods, helpers are used when needed.|
+|TDD          |4      |SimpleCov of 100%, all methods tested extensively, mocks and stubs are used when appropriate.|
+|Version Control|4    |15 PRs, 50+ commits, numerous branches for most methods and features.|
 ---
 This project is based on the starter repository for the [Turing School](https://turing.io/) Enigma project.
 
