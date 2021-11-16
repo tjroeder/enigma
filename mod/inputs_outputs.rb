@@ -11,15 +11,12 @@ module InputsOutputs
   def cli_user_input(arg_array)
     @cli_read_path = arg_array[0]
     @cli_write_path = arg_array[1]
-
-    # need to fix if the message is nil put in guard check.
     @cli_message = file_read(@cli_read_path)
-    # need to check key and date 
     @cli_key = arg_array[2] if arg_array.length >= 3
     @cli_date = arg_array[3] if arg_array.length == 4
   end
 
   def cli_print_message
-    "Created '#{self.cli_write_path}' with key #{self.cli_key} and date #{self.cli_date}"
+    "Created '#{cli_write_path}' with key #{cli_key} and date #{cli_date}"
   end
 end
