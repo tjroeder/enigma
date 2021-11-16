@@ -23,6 +23,7 @@ class Enigma < Cipher
     @char_array = ('a'..'z').to_a.push(' ')
   end
 
+  # Crypt the message using rotating shift array and the char_array
   def crypter(message)
     @new_message = ''
     message.each_char do |char|
@@ -33,6 +34,7 @@ class Enigma < Cipher
     end
   end
 
+  # Encrypt the message using provided or created key and date
   def encrypt(message, key = key_creator, date = date_formatter)
     @cli_key = key
     @cli_date = date
@@ -41,7 +43,8 @@ class Enigma < Cipher
     crypter(message.downcase)
     {encryption: @new_message, key: key, date: date}
   end
-
+  
+  # Decrypt the message using provided or created key and date
   def decrypt(message, key = key_creator, date = date_formatter)
     @cli_key = key
     @cli_date = date
