@@ -15,7 +15,10 @@ module InputsOutputs
     @cli_read_path = arg_array[0]
     @cli_write_path = arg_array[1]
     @cli_message = file_read(@cli_read_path)
-    @cli_key = arg_array[2] if arg_array.length >= 3
+    if arg_array.length == 3
+      @cli_key = arg_array[2] 
+      @cli_date = date_formatter
+    end
     @cli_date = arg_array[3] if arg_array.length == 4
   end
 
